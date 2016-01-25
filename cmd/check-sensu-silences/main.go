@@ -10,8 +10,9 @@ package main
 
 import (
 	"crypto/tls"
-	"fmt"
+	//"fmt"
 	"github.com/codegangsta/cli"
+	"github.com/yieldbot/sensuplugin/sensuutil"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -55,11 +56,13 @@ func main() {
 		}
 		defer resp.Body.Close()
 
-		if strings.Contains(bodyString, "\"expire\":-1") && !strings.Contains(bodyString, "[infra]") {
+		if strings.Contains(bodyString, "\"expire\":-1") {
 
-			fmt.Printf("body: %v\n", bodyString)
+			//fmt.Printf("body: %v\n", bodyString)
+			sensuutil.Exit("critical", bodyString)
 		} else {
-			fmt.Printf("All is well\n")
+			sensuutil.Exit("ok", "All is well\n")
+			//fmt.Printf("All is well\n")
 		}
 	}
 	app.Flags = []cli.Flag{
