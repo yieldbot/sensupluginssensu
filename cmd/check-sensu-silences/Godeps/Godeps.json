@@ -1,0 +1,11 @@
+{
+	"ImportPath": "github.com/yieldbot/sensusensu/cmd/check-sensu-silences",
+	"GoVersion": "go1.5",
+	"Deps": [
+		{
+			"ImportPath": "github.com/codegangsta/cli",
+			"Comment": "1.2.0-193-gf9cc300",
+			"Rev": "f9cc3001e04f9783cb4ad08ca6791aa07134787c"
+		}
+	]
+}
