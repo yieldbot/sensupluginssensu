@@ -18,6 +18,16 @@ import (
 	"strings"
 )
 
+/*
+
+TODO:
+
+- need to document stuff as needed
+- need to add error handling
+- need to add debugging
+- need to parse json to make check more effective
+*/
+
 func main() {
 	var host string
 	var user string
