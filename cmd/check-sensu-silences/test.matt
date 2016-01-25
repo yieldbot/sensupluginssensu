@@ -1,0 +1,84 @@
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	//"log"
+	"crypto/tls"
+	//"github.com/yieldbot/sensuplugin/sensuutil"
+	//	"net/http"
+	"github.com/parnurzeal/gorequest"
+)
+
+func main() {
+	//	var host string
+	//	var user string
+	//	var pass string
+
+	type sensuStash struct {
+		Path    string
+		Content struct {
+			Reason    string
+			Source    string
+			Timestamp string
+			Username  string
+		}
+		Expire string
+	}
+
+	//here is the good stuff
+
+	request := gorequest.New().
+		SetBasicAuth("admin", "password").
+		TLSClientConfig(&tls.Config{InsecureSkipVerify: true})
+	resp, body, err := request.Get("https://general.sensu-api.service.consul:4567/stashes").End()
+	//resp, body, err := request.Get("http://example.com").End()
+
+	if err != nil {
+		panic(err)
+	}
+	//RedirectPolicy(redirectPolicyFunc).
+	//Set("If-None-Match", `W/"wyzzy"`).
+
+	/*
+		client := &http.Client{}
+
+		resp, err := client.Get("http://example.com")
+		// ...
+
+		req, err := http.NewRequest("GET", "http://example.com", nil)
+		// ...
+		resp, err = client.Do(req)
+	*/
+	//client := &http.Client{}
+
+	//req, err := http.NewRequest("GET", "http://www.google.com/robots.txt", nil)
+	//resp, err := client.Do(req)
+	//if err != nil {
+	//		sensuutil.EHndlr(err)
+	//	}
+
+	//	defer resp.Body.Close()
+
+	matt, err2 := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		panic(err2)
+	}
+	fmt.Printf("body: %v\n", body)
+	fmt.Printf("matt: %v\n", matt)
+	//fmt.Printf("%v\n", resp.StatusCode)
+	//fmt.Printf("%v\n", resp.Header)
+}
+
+/*
+	res, err := http.Get("http://www.google.com/robots.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	robots, err := ioutil.ReadAll(res.Body)
+	res.Body.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%s", robots)
+}*/
