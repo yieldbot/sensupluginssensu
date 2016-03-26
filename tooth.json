@@ -22,6 +22,7 @@
     "If nothing is there then nothing will be pushed back to GH or artifactory."
   ],
   "commit": [
+    "version"
   ],
   "publish": [
   ]
