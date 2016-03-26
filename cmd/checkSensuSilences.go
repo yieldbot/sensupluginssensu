@@ -38,6 +38,10 @@ var apiPassword string
 var bodyString string
 var bodyBytes []byte
 
+// Tech Debt
+// YELLOW needs clean refactor
+// YELLOW needs unit tests
+
 // checkSensuSilencesCmd represents the checkSensuSilences command
 var checkSensuSilencesCmd = &cobra.Command{
 	Use:   "checkSensuSilences",
