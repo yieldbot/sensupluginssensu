@@ -13,7 +13,7 @@ SRCPATH="/opt/gopath"
 ARCH=`uname -m | sed 's|i686|386|' | sed 's|x86_64|amd64|'`
 # Install Prereq Packages
 sudo apt-get update
-sudo apt-get install -y build-essential curl git-core libpcre3-dev mercurial pkg-config zip expect
+sudo apt-get install -y build-essential chrony curl git-core libpcre3-dev mercurial pkg-config zip expect
 # Install Go
 cd /tmp
 wget -q https://storage.googleapis.com/golang/go1.5.1.linux-${ARCH}.tar.gz
@@ -49,10 +49,10 @@ SCRIPT
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = 'ubuntu/trusty64'
-  config.vm.hostname = 'sensusensu'
+  config.vm.hostname = 'sensupluginssensu'
 
   config.vm.provision 'shell', inline: $script, privileged: false
-  config.vm.synced_folder '.', '/opt/gopath/src/github.com/yieldbot/sensusensu'
+  config.vm.synced_folder '.', '/opt/gopath/src/github.com/yieldbot/sensupluginssensu'
   config.ssh.forward_agent = true
 
   config.vm.provider :virtualbox do |vb|

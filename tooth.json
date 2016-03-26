@@ -1,0 +1,28 @@
+{
+  "coordinates": {
+    "org": "sensupluginssensu",
+    "name": "sensupluginssensu",
+    "type": "golang",
+    "tag": false
+  },
+  "build": [
+    "make pkg=sensupluginssensu pre-build && make pkg=sensupluginssensu all"
+  ],
+  "bump": [
+    "make version_bump"
+  ],
+  "version": [
+    "make version"
+  ],
+  "clean": [
+    "make clean"
+  ],
+  "_comments": [
+    "When you want to push a new commit back to GH  and a release to artifactory you will need to add \"version\" to the commit block below, preserving the quotes.",
+    "If nothing is there then nothing will be pushed back to GH or artifactory."
+  ],
+  "commit": [
+  ],
+  "publish": [
+  ]
+}
