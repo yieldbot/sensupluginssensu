@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package cmd
+package sensupluginssensu
 
 import (
 	"bytes"
@@ -29,6 +29,8 @@ import (
 	"os/exec"
 )
 
+// AcquireLocalChecks will retrieve the currently running configuration and
+// return a list of all checks it knows about
 func AcquireLocalChecks() {
 	// ?	var jsonOut Message
 	var jsonOut interface{}

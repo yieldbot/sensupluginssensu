@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package cmd
+package sensupluginssensu
 
 import "github.com/spf13/cobra"
 
@@ -39,7 +39,7 @@ var handlerRemoveExpiredChecksCmd = &cobra.Command{
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:`,
 
-	Run: func(cmd *cobra.Command, args []string) {
+	Run: func(sensupluginssensu *cobra.Command, args []string) {
 
 		AcquireLocalChecks()
 

@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package cmd
+package sensupluginssensu
 
 import (
 	"crypto/tls"
@@ -49,7 +49,7 @@ var checkSensuSilencesCmd = &cobra.Command{
 	Long: `Checks that have been silenced with no expiration can cause problems and lead to
   unforeseen issues. This check will ensure that any checks that receive a expiration time
   of 'no expiration' are known to everyone and can be accounted for and not forgotten about.`,
-	Run: func(cmd *cobra.Command, args []string) {
+	Run: func(sensupluginssensu *cobra.Command, args []string) {
 
 		if apiHost == "" {
 			apiHost = viper.GetString("sensupluginssensu.checkSensuSilences.apiHost")
