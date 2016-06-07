@@ -22,22 +22,33 @@ package sensupluginssensu
 
 import (
 	"fmt"
+	"log/syslog"
 	"os"
 
+	"github.com/Sirupsen/logrus"
+	"github.com/Sirupsen/logrus/hooks/syslog"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/yieldbot/sensuplugin/sensuutil"
+	"github.com/yieldbot/sensupluginssensu/version"
 )
 
+// Configuration via Viper
 var cfgFile string
+
+// Hostname for logging
+var host string
+
+// Create a logging instance.
+var syslogLog = logrus.New()
+
+// Dump debugging info or not
 var debug bool
-var publish bool
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
 	Use:   "sensupluginssensu",
-	Short: "Plugins for Sensu Monitoring Platform",
-	Long:  ``,
-	Run:   func(sensupluginssensu *cobra.Command, args []string) {},
+	Short: fmt.Sprintf("A set of process checks for Sensu - (%s)", version.AppVersion()),
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.
@@ -52,25 +63,53 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.sensupluginssensu.yaml)")
+	// Setup logging for the package. Doing it here is much eaiser than in each
+	// binary. If you want to overwrite it in a specific binary then feel free.
+	hook, err := logrus_syslog.NewSyslogHook("", "", syslog.LOG_INFO, "")
+	if err != nil {
+		panic(err)
+	}
+	syslogLog.Hooks.Add(hook)
+	syslogLog.Formatter = new(logrus.JSONFormatter)
+
+	// Set the hostname for use in logging within the package. Doing it here is
+	// cleaner than in each binary but if you want to use some other method just
+	// override the variable in the specific binary.
+	host, err = os.Hostname()
+	if err != nil {
+		syslogLog.WithFields(logrus.Fields{
+			"check":   "sensupluginssensu",
+			"client":  "unknown",
+			"version": version.AppVersion(),
+			"error":   err,
+		}).Error(`Could not determine the hostname of this machine as reported by the kernel.`)
+		sensuutil.Exit("GENERALGOLANGERROR")
+	}
+
+	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is /etc/sensuplugins/conf.d/.sensupluginssensu.yaml)")
 	RootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	RootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "print debugging info (if any)")
-	RootCmd.PersistentFlags().BoolVar(&publish, "publish", false, "publish the results to sensu")
-
-	viper.SetDefault("author", "Yieldbot <infra@yieldbot.com>")
-	viper.SetDefault("license", "MIT")
 
 }
 
+// initConfig reads in config file and ENV variables if set.
 func initConfig() {
 	if cfgFile != "" {
 		viper.SetConfigFile(cfgFile)
+	} else {
+		viper.SetConfigName("sensupluginssensu")
+		viper.AddConfigPath("/etc/sensuplugins/conf.d")
 	}
 
-	viper.SetConfigName("sensupluginssensu")
-	viper.AddConfigPath("/etc/sensuplugins/conf.d")
 	viper.AutomaticEnv()
-
 	if err := viper.ReadInConfig(); err == nil {
+	} else {
+		syslogLog.WithFields(logrus.Fields{
+			"check":   "sensupluginssensu",
+			"client":  host,
+			"version": version.AppVersion(),
+			"error":   err,
+			"cfgFile": cfgFile,
+		}).Error(`Could not read in the configuration file.`)
 	}
 }
