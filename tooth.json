@@ -21,6 +21,6 @@
     "make clean"
   ],
   "commit": [
-    "versions/version.go"
+    "version/version.go"
   ]
 }
