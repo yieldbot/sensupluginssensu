@@ -21,53 +21,41 @@
 package sensupluginssensu
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
-	"os"
 	"os/exec"
+
+	"github.com/Sirupsen/logrus"
+	"github.com/yieldbot/sensupluginssensu/version"
 )
 
 // AcquireLocalChecks will retrieve the currently running configuration and
 // return a list of all checks it knows about
 func AcquireLocalChecks() {
-	// ?	var jsonOut Message
-	var jsonOut interface{}
-	// localChecks, err := exec.Command("/opt/sensu/embedded/bin/sensu-client", "-d", "/etc/sensu/conf.d", "-P")
+	var jsonOut map[string][]string
+	localChecks := exec.Command("/opt/sensu/embedded/bin/sensu-client", "-L", "error", "-d", "/etc/sensu/conf.d", "-P")
 
-	// out, err := localChecks.Output()
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	// func main() {
-	c1 := exec.Command("/opt/sensu/embedded/bin/sensu-client", "-d", "/etc/sensu/conf.d", "-P")
-	c2 := exec.Command("grep", "-v", "timestamp")
-
-	r, w := io.Pipe()
-	c1.Stdout = w
-	c2.Stdin = r
-
-	var b2 bytes.Buffer
-	c2.Stdout = &b2
-
-	c1.Start()
-	c2.Start()
-	c1.Wait()
-	w.Close()
-	c2.Wait()
-	io.Copy(os.Stdout, &b2)
-
-	b2.WriteTo(os.Stdout)
-
-	err := json.Unmarshal(b2.Bytes(), &jsonOut)
+	out, err := localChecks.Output()
 	if err != nil {
-		panic(err)
+		syslogLog.WithFields(logrus.Fields{
+			"check":   "sensupluginssensu",
+			"client":  host,
+			"version": version.AppVersion(),
+			"error":   err,
+		}).Error(`Local Checks returned invalid output`)
 	}
 
-	fmt.Println("test")
-	fmt.Println(jsonOut)
+	err = json.Unmarshal(out, &jsonOut)
+	if err != nil {
+		syslogLog.WithFields(logrus.Fields{
+			"check":   "sensupluginssensu",
+			"client":  host,
+			"version": version.AppVersion(),
+			"error":   err,
+			"output":  out,
+		}).Error(`Could not unmarshall the json.`)
+	}
 
-	// fmt.Println(jsonOut.redis.port)
+	fmt.Println(jsonOut)
+	fmt.Println(jsonOut["transport"])
 }

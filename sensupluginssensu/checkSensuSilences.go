@@ -32,15 +32,12 @@ import (
 	"github.com/yieldbot/sensuplugin/sensuutil"
 )
 
-var apiHost string
-var apiUser string
-var apiPassword string
+// Sensu api credentials
+var apiHost, apiUser, apiPassword string
+
+// Sensu api output
 var bodyString string
 var bodyBytes []byte
-
-// Tech Debt
-// YELLOW needs clean refactor
-// YELLOW needs unit tests
 
 // checkSensuSilencesCmd represents the checkSensuSilences command
 var checkSensuSilencesCmd = &cobra.Command{
