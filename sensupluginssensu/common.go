@@ -26,7 +26,7 @@ import (
 	"os/exec"
 
 	"github.com/Sirupsen/logrus"
-	"github.com/yieldbot/sensupluginssensu/version"
+	//"github.com/yieldbot/sensupluginssensu/version"
 )
 
 // AcquireLocalChecks will retrieve the currently running configuration and
@@ -40,7 +40,7 @@ func AcquireLocalChecks() {
 		syslogLog.WithFields(logrus.Fields{
 			"check":   "sensupluginssensu",
 			"client":  host,
-			"version": version.AppVersion(),
+			//"version": version.AppVersion(),
 			"error":   err,
 		}).Error(`Local Checks returned invalid output`)
 	}
@@ -50,7 +50,7 @@ func AcquireLocalChecks() {
 		syslogLog.WithFields(logrus.Fields{
 			"check":   "sensupluginssensu",
 			"client":  host,
-			"version": version.AppVersion(),
+			//"version": version.AppVersion(),
 			"error":   err,
 			"output":  out,
 		}).Error(`Could not unmarshall the json.`)

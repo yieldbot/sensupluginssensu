@@ -30,7 +30,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/yieldbot/sensuplugin/sensuutil"
-	"github.com/yieldbot/sensupluginssensu/version"
+	//"github.com/yieldbot/sensupluginssensu/version"
 )
 
 // Configuration via Viper
@@ -48,7 +48,7 @@ var debug bool
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
 	Use:   "sensupluginssensu",
-	Short: fmt.Sprintf("A set of process checks for Sensu - (%s)", version.AppVersion()),
+	//Short: fmt.Sprintf("A set of process checks for Sensu - (%s)", version.AppVersion()),
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.
@@ -80,7 +80,7 @@ func init() {
 		syslogLog.WithFields(logrus.Fields{
 			"check":   "sensupluginssensu",
 			"client":  "unknown",
-			"version": version.AppVersion(),
+			//"version": version.AppVersion(),
 			"error":   err,
 		}).Error(`Could not determine the hostname of this machine as reported by the kernel.`)
 		sensuutil.Exit("GENERALGOLANGERROR")
@@ -107,7 +107,7 @@ func initConfig() {
 		syslogLog.WithFields(logrus.Fields{
 			"check":   "sensupluginssensu",
 			"client":  host,
-			"version": version.AppVersion(),
+			//"version": version.AppVersion(),
 			"error":   err,
 			"cfgFile": cfgFile,
 		}).Error(`Could not read in the configuration file.`)
